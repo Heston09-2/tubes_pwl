@@ -1,157 +1,162 @@
 @extends('pelajar.layouts.app')
 
+{{-- Tambah CSS untuk smooth scroll --}}
+@push('styles')
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+@endpush
+
 @section('content')
-    <!-- Hero / Banner -->
-    <div class="relative bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white rounded-2xl overflow-hidden shadow-2xl mb-10 group">
-        @if($randomMaterial && $randomMaterial->image)
-            <img src="{{ asset('storage/' . $randomMaterial->image) }}" alt="Gambar Sejarah" class="w-full h-64 object-cover opacity-30 group-hover:opacity-40 transition-opacity duration-500">
-        @else
-            <div class="w-full h-64 bg-gradient-to-r from-blue-900/50 to-purple-900/50 opacity-40"></div>
-        @endif
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-        <div class="absolute inset-0 flex flex-col justify-center items-center px-6">
-            <h1 class="text-5xl font-bold mb-4 text-center bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-transparent animate-pulse">
-                Selamat Datang di Flows Museum
+<!-- Hero Section -->
+<div class="relative bg-gradient-to-br from-blue-50 via-sky-50 to-blue-100 rounded-3xl overflow-hidden shadow-lg mb-12">
+    <div class="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-sky-600/5"></div>
+
+    <div class="relative flex flex-col lg:flex-row items-center min-h-[500px] px-8 py-12">
+        <div class="flex-1 lg:pr-12 text-center lg:text-left">
+            <h1 class="text-4xl lg:text-5xl font-light mb-6 text-slate-800 leading-tight">
+                Selamat Datang di 
+                <span class="font-semibold text-blue-600">Flows Museum</span>
             </h1>
-            <p class="text-xl text-center text-gray-200 max-w-2xl leading-relaxed">
-                Belajar sejarah dengan visual menarik dan konten terkurasi.
+            <p class="text-lg text-slate-600 mb-8 leading-relaxed max-w-xl">
+                Jelajahi perjalanan sejarah dengan pendekatan visual yang menarik dan konten berkualitas tinggi.
             </p>
-            <div class="mt-6 flex space-x-2">
-                <div class="w-2 h-2 bg-blue-400 rounded-full animate-bounce"></div>
-                <div class="w-2 h-2 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
-                <div class="w-2 h-2 bg-pink-400 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+            <div class="flex justify-center lg:justify-start space-x-4">
+                <a href="#categories" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition-colors duration-200 shadow-md hover:shadow-lg">
+                    Mulai Belajar
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+                <a href="#latest" class="inline-flex items-center px-6 py-3 border-2 border-blue-600 text-blue-600 rounded-xl font-medium hover:bg-blue-50 transition-colors duration-200">
+                    Lihat Materi
+                </a>
+            </div>
+        </div>
+
+        <div class="flex-1 mt-8 lg:mt-0 flex justify-center lg:justify-end">
+            <div class="relative w-full max-w-md">
+                <div class="relative bg-transparent p-0 shadow-none border-none">
+                    <div class="w-full h-90 relative overflow-hidden rounded-xl">
+                        <img src="/image/sejarah.png" alt="Ilustrasi Orang Belajar" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-20"></div>
+                    <div class="absolute -bottom-2 -left-2 w-6 h-6 bg-sky-500 rounded-full opacity-30"></div>
+                </div>
             </div>
         </div>
     </div>
-    <a href="{{ route('pelajar.quizzes.index') }}" class="block text-blue-600 hover:underline">
-    📘 Ikuti Kuis
-</a>
+</div>
 
-
-    <!-- Kategori Populer -->
-    <section class="mb-16">
-        <div class="flex items-center mb-8">
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent"></div>
-            <h2 class="text-3xl font-bold mx-6 text-gray-800 relative">
-                <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    Kategori Populer
+<!-- Kategori Populer -->
+<section id="categories" class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-light text-slate-800 mb-4">
+            Kategori <span class="font-semibold text-blue-600">Populer</span>
+        </h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        @foreach($popularCategories as $category)
+        <a href="{{ route('pelajar.kategori.show', $category->id) }}" class="group bg-white rounded-2xl shadow-sm hover:shadow-md border border-blue-100 hover:border-blue-200 p-6 text-center transition-all duration-200 hover:-translate-y-1">
+            <div class="w-12 h-12 bg-blue-100 rounded-xl mx-auto mb-4 flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-200">
+                <svg class="w-6 h-6 text-blue-600 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-slate-800 mb-2">{{ $category->name }}</h3>
+            <p class="text-sm text-slate-500">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-blue-50 text-blue-700 border border-blue-200">
+                    {{ $category->materials_count }} materi
                 </span>
-                <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"></div>
-            </h2>
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent"></div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            @foreach($popularCategories as $category)
-                <a href="{{ route('pelajar.kategori.show', $category->id) }}" 
-                   class="group bg-white/80 backdrop-blur-sm shadow-lg hover:shadow-2xl p-6 rounded-2xl text-center transform hover:scale-105 transition-all duration-300 border border-gray-100 hover:border-blue-200">
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl mx-auto mb-4 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-pink-600 transition-all duration-300">
-                        {{ $category->name }}
-                    </h3>
-                    <p class="text-sm text-gray-500 mt-2 group-hover:text-gray-600 transition-colors">
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800 group-hover:bg-blue-200">
-                            {{ $category->materials_count }} materi
-                        </span>
-                    </p>
-                </a>
-            @endforeach
-        </div>
-    </section>
+            </p>
+        </a>
+        @endforeach
+    </div>
+</section>
 
-    <!-- Kategori Berdasarkan Minat -->
-    @if($minatCategories->isNotEmpty())
-    <section class="mb-16">
-        <div class="flex items-center mb-8">
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-emerald-300 to-transparent"></div>
-            <h2 class="text-3xl font-bold mx-6 text-gray-800 relative">
-                <span class="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
-                    Kategori Sesuai Minatmu
+<!-- Kategori Berdasarkan Minat -->
+@if($minatCategories->isNotEmpty())
+<section class="mb-16">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-light text-slate-800 mb-4">
+            Kategori Sesuai <span class="font-semibold text-blue-600">Minatmu</span>
+        </h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        @foreach($minatCategories as $category)
+        <a href="{{ route('pelajar.kategori.show', $category->id) }}" class="group relative bg-gradient-to-br from-blue-50 to-sky-50 rounded-2xl shadow-sm hover:shadow-md border-2 border-blue-200 hover:border-blue-300 p-6 text-center transition-all duration-200 hover:-translate-y-1 overflow-hidden">
+            <div class="absolute top-2 right-2 w-3 h-3 bg-blue-500 rounded-full"></div>
+            <div class="w-12 h-12 bg-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-slate-800 mb-2">{{ $category->name }}</h3>
+            <p class="text-sm text-slate-600">
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-700 border border-blue-200">
+                    {{ $category->materials_count }} materi
                 </span>
-                <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full"></div>
-            </h2>
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent"></div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-            @foreach($minatCategories as $category)
-                <a href="{{ route('pelajar.kategori.show', $category->id) }}" 
-                   class="group bg-gradient-to-br from-emerald-50 to-blue-50 shadow-lg hover:shadow-2xl p-6 rounded-2xl text-center border-2 border-gradient-to-r from-emerald-400 to-blue-500 hover:border-emerald-500 transform hover:scale-105 transition-all duration-300 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-emerald-400/20 to-blue-400/20 rounded-full -mr-8 -mt-8"></div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-blue-600 rounded-xl mx-auto mb-4 flex items-center justify-center group-hover:rotate-12 transition-transform duration-300 relative z-10">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent group-hover:from-blue-600 group-hover:to-purple-600 transition-all duration-300 relative z-10">
-                        {{ $category->name }}
-                    </h3>
-                    <p class="text-sm text-gray-600 mt-2 group-hover:text-gray-700 transition-colors relative z-10">
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-emerald-100 text-emerald-800 group-hover:bg-emerald-200">
-                            {{ $category->materials_count }} materi
-                        </span>
-                    </p>
-                </a>
-            @endforeach
-        </div>
-    </section>
-    @endif
+            </p>
+        </a>
+        @endforeach
+    </div>
+</section>
+@endif
 
-    <!-- Materi Terbaru -->
-    <section>
-        <div class="flex items-center mb-8">
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-purple-300 to-transparent"></div>
-            <h2 class="text-3xl font-bold mx-6 text-gray-800 relative">
-                <span class="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    Materi Terbaru
-                </span>
-                <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-16 h-1 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"></div>
-            </h2>
-            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-pink-300 to-transparent"></div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            @foreach($latestMaterials as $material)
-                <div class="group bg-white/90 backdrop-blur-sm shadow-lg rounded-2xl p-6 hover:shadow-2xl transition-all duration-300 transform hover:scale-105 border border-gray-100 hover:border-purple-200 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-pink-500"></div>
-                    <div class="absolute -top-4 -right-4 w-16 h-16 bg-gradient-to-br from-purple-400/10 to-pink-400/10 rounded-full"></div>
-                    
-                    <div class="relative z-10">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform duration-300">
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
-                                {{ $material->created_at->format('d M Y') }}
-                            </span>
-                        </div>
-                        
-                        <h2 class="text-xl font-bold bg-gradient-to-r from-purple-700 to-pink-600 bg-clip-text text-transparent mb-3 group-hover:from-pink-600 group-hover:to-purple-700 transition-all duration-300">
-                            {{ $material->title }}
-                        </h2>
-                        
-                        <div class="space-y-2 mb-4">
-                            <div class="flex items-center text-sm text-gray-600">
-                                <svg class="w-4 h-4 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a.997.997 0 01-1.414 0l-7-7A1.997 1.997 0 013 12V7a4 4 0 014-4z"></path>
-                                </svg>
-                                <span class="font-medium">{{ $material->category->name }}</span>
-                            </div>
-                        </div>
-                        
-                        <a href="{{ route('pelajar.materi.show', $material->id) }}" 
-                           class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-sm font-semibold rounded-lg hover:from-pink-500 hover:to-purple-500 transition-all duration-300 transform hover:scale-105 shadow-md hover:shadow-lg">
-                            <span>Baca Selengkapnya</span>
-                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </a>
-                    </div>
+<!-- Materi Terbaru -->
+<section id="latest">
+    <div class="text-center mb-12">
+        <h2 class="text-3xl font-light text-slate-800 mb-4">
+            Materi <span class="font-semibold text-blue-600">Terbaru</span>
+        </h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto rounded-full"></div>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        @foreach($latestMaterials as $material)
+        <div class="group bg-white rounded-2xl shadow-sm hover:shadow-lg border border-blue-100 hover:border-blue-200 p-6 transition-all duration-200 hover:-translate-y-1">
+            <div class="flex items-start justify-between mb-4">
+                <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-200">
+                    <svg class="w-5 h-5 text-blue-600 group-hover:text-white transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
                 </div>
-            @endforeach
+                <span class="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
+                    {{ $material->created_at->format('d M Y') }}
+                </span>
+            </div>
+            <h2 class="text-xl font-medium text-slate-800 mb-3 line-clamp-2">
+                {{ $material->title }}
+            </h2>
+            <div class="flex items-center text-sm text-slate-600 mb-6">
+                <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a.997.997 0 01-1.414 0l-7-7A1.997 1.997 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                <span>{{ $material->category->name }}</span>
+            </div>
+            <a href="{{ route('pelajar.materi.show', $material->id) }}" class="inline-flex items-center text-blue-600 font-medium hover:text-blue-700 transition-colors duration-200">
+                <span>Baca Selengkapnya</span>
+                <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
         </div>
-    </section>
+        @endforeach
+    </div>
+</section>
+
+<!-- Tombol Hubungi Kami -->
+<div class="fixed bottom-6 right-6 z-50">
+    <a href="{{ route('pelajar.contact.form') }}">
+        <button class="w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center" title="Hubungi Kami">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </button>
+    </a>
+</div>
 @endsection

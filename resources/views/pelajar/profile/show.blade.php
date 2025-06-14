@@ -14,6 +14,7 @@
         <p><span class="font-semibold">Pendidikan:</span> {{ $pelajar->pendidikan }}</p>
         
     </div>
+   
 
     <div class="mt-6">
         <a href="{{ route('pelajar.profile.edit') }}"

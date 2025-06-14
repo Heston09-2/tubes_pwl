@@ -16,16 +16,16 @@ class CategoryController extends Controller
 public function store(Request $request)
 {
     $request->validate([
-        'name' => 'required|string|max:255|unique:categories,name',
+        'name' => 'required|array',
+        'name.*' => 'required|string|max:255|unique:categories,name',
     ]);
 
-    Category::create([
-        'name' => $request->name,
-    ]);
+    foreach ($request->name as $name) {
+        Category::create(['name' => $name]);
+    }
 
-    return redirect()->route('admin.categories.create')->with('success', 'Kategori berhasil ditambahkan.');
+    return redirect()->route('admin.materials.index')->with('success', 'Kategori berhasil ditambahkan.');
 }
-
 
 
 }

@@ -26,25 +26,36 @@ class MaterialController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'content' => 'required',
-            'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'required|exists:subcategories,id',
-            'image' => 'nullable|image|max:2048',
-        ]);
+{
+    $count = count($request->title);
 
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')->store('materials', 'public');
+    for ($i = 0; $i < $count; $i++) {
+        // Validasi setiap input
+        $request->validate([
+            'title.' . $i => 'required|string|max:255',
+            'content.' . $i => 'required',
+            'category_id.' . $i => 'required|exists:categories,id',
+            'subcategory_id.' . $i => 'required|exists:subcategories,id',
+            'image.' . $i => 'nullable|image|max:2048',
+        ]);
+        
+        $imagePath = null;
+        if ($request->hasFile("image.$i")) {
+            $imagePath = $request->file("image.$i")->store('materials', 'public');
         }
 
-        $validated['admin_id'] = Auth::id();
-
-        Material::create($validated);
-
-        return redirect()->route('admin.materials.index')->with('success', 'Materi berhasil ditambahkan.');
+        Material::create([
+            'title' => $request->title[$i],
+            'content' => $request->content[$i],
+            'category_id' => $request->category_id[$i],
+            'subcategory_id' => $request->subcategory_id[$i],
+            'image' => $imagePath,
+            'admin_id' => Auth::id(),
+        ]);
     }
+
+    return redirect()->route('admin.materials.index')->with('success', 'Semua materi berhasil ditambahkan.');
+}
 
     public function edit(Material $material)
 {

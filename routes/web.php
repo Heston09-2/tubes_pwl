@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\MaterialController;
 use App\Http\Controllers\Pelajar\KategoriController;
 use App\Http\Controllers\Pelajar\MateriController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\ForumController;
 
 
 
@@ -247,6 +248,18 @@ Route::middleware(['auth:pelajar'])->prefix('pelajar')->name('pelajar.')->group(
 
     Route::get('/contact-us', [ContactController::class, 'showForm'])->name('contact.form');
     Route::post('/contact-us', [ContactController::class, 'submitForm'])->name('contact.submit');
+
+    Route::get('/forum', [ForumController::class, 'index'])->name('forum.index');
+    Route::get('/forum/create', [ForumController::class, 'create'])->name('forum.create');
+    Route::post('/forum', [ForumController::class, 'store'])->name('forum.store');
+    Route::get('/forum/{forum}', [ForumController::class, 'show'])->name('forum.show');
+     Route::get('/forum/{forum}/edit', [ForumController::class, 'edit'])->name('forum.edit');
+    Route::put('/forum/{forum}', [ForumController::class, 'update'])->name('forum.update');
+    Route::delete('/forum/{forum}', [ForumController::class, 'destroy'])->name('forum.destroy');
+    Route::post('/forum/{forum}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
+
+
+    Route::get('/profile/forum', [ForumController::class, 'myForums'])->name('forum.mine');
     
 
 
@@ -324,7 +337,7 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
         return response()->json($category->subcategories);
     })->name('admin.categories.subcategories');
 
-    // ✅ Quizzes
+    
     Route::get('/admin/quizzes', [QuizController::class, 'index'])->name('admin.quizzes.index');
     Route::get('/admin/quizzes/create', [QuizController::class, 'create'])->name('admin.quizzes.create');
     Route::post('/admin/quizzes', [QuizController::class, 'store'])->name('admin.quizzes.store');
