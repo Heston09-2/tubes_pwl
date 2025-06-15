@@ -13,11 +13,32 @@ use Illuminate\Support\Facades\Storage;
 
 class MaterialController extends Controller
 {
-    public function index()
-    {
-        $materials = Material::with('category', 'subcategory')->latest()->paginate(10);
-        return view('admin.materials.index', compact('materials'));
+    public function index(Request $request)
+{
+    // Ambil semua kategori dan subkategori untuk filter
+    $categories = Category::all();
+    $subcategories = Subcategory::all();
+
+    // Query data materi
+    $query = Material::with('category', 'subcategory', 'admin')->latest();
+
+    // Filter berdasarkan kategori jika ada
+    if ($request->filled('category_id')) {
+        $query->where('category_id', $request->category_id);
     }
+
+    // Filter berdasarkan subkategori jika ada
+    if ($request->filled('subcategory_id')) {
+        $query->where('subcategory_id', $request->subcategory_id);
+    }
+
+    // Ambil hasil dengan pagination
+    $materials = $query->paginate(10);
+
+    // Kirim ke view
+    return view('admin.materials.index', compact('materials', 'categories', 'subcategories'));
+}
+
 
     public function create()
     {
@@ -102,7 +123,12 @@ class MaterialController extends Controller
         return redirect()->route('admin.materials.index')->with('success', 'Materi berhasil dihapus.');
     }
 
-    
+    public function getSubcategories($categoryId)
+{
+    $subcategories = Subcategory::where('category_id', $categoryId)->get(['id', 'name']);
+    return response()->json($subcategories);
+}
+
 
 
     

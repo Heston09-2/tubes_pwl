@@ -16,4 +16,6 @@ public function pelajar()
     public function material() {
         return $this->belongsTo(Material::class);
     }
+
+    
 }

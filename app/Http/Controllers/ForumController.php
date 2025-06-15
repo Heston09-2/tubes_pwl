@@ -130,4 +130,5 @@ public function storeComment(Request $request, Forum $forum)
     return redirect()->route('pelajar.forum.show', $forum)->with('success', 'Komentar berhasil dikirim.');
 }
 
+
 }

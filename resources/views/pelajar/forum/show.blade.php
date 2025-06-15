@@ -2,10 +2,9 @@
 
 @section('content')
 <div class="max-w-3xl mx-auto mt-8 p-4 bg-white shadow rounded-lg">
-
     {{-- Judul dan isi forum --}}
     <h1 class="text-3xl font-bold mb-2">{{ $forum->title }}</h1>
-    <p class="text-gray-600 mb-4">Oleh {{ $forum->pelajar->nama ?? 'Anonim' }}</p>
+    <p class="text-gray-600 mb-4">Oleh {{ $forum->pelajar->name ?? 'Anonim' }}</p>
     <p class="mb-4">{{ $forum->description }}</p>
 
     @if ($forum->image)
@@ -30,10 +29,20 @@
         <h2 class="text-xl font-semibold mb-4">Komentar</h2>
 
         @forelse ($comments as $comment)
-            <div class="border-t py-3">
-                <p class="text-sm text-gray-700 font-semibold">{{ $comment->pelajar->nama }}</p>
-                <p>{{ $comment->content }}</p>
-                <p class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</p>
+            <div class="border-t py-3 flex items-start space-x-3">
+                {{-- Foto profil dengan inisial --}}
+                <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span class="text-white font-semibold text-sm">
+                        {{ substr($comment->pelajar->name ?? 'P', 0, 1) }}
+                    </span>
+                </div>
+                
+                {{-- Konten komentar --}}
+                <div class="flex-1">
+                    <p class="text-sm text-gray-700 font-semibold">{{ $comment->pelajar->name ?? 'Anonim' }}</p>
+                    <p class="mt-1">{{ $comment->content }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ $comment->created_at->diffForHumans() }}</p>
+                </div>
             </div>
         @empty
             <p class="text-gray-500">Belum ada komentar.</p>

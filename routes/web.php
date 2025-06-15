@@ -257,6 +257,7 @@ Route::middleware(['auth:pelajar'])->prefix('pelajar')->name('pelajar.')->group(
     Route::put('/forum/{forum}', [ForumController::class, 'update'])->name('forum.update');
     Route::delete('/forum/{forum}', [ForumController::class, 'destroy'])->name('forum.destroy');
     Route::post('/forum/{forum}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
+    
 
 
     Route::get('/profile/forum', [ForumController::class, 'myForums'])->name('forum.mine');
@@ -336,6 +337,8 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::get('/admin/categories/{category}/subcategories', function (\App\Models\Category $category) {
         return response()->json($category->subcategories);
     })->name('admin.categories.subcategories');
+    Route::get('/admin/get-subcategories/{category}', [MaterialController::class, 'getSubcategories']);
+
 
     
     Route::get('/admin/quizzes', [QuizController::class, 'index'])->name('admin.quizzes.index');
