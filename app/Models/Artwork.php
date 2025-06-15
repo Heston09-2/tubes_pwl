@@ -22,15 +22,12 @@ class Artwork extends Model
         'origin', 
         'description', 
         'image',
-       'status', // Menambahkan atribut status
+       'status',
         
 
     ];
 
-    public function incrementViews()
-{
-    $this->increment('views');
-}
+
     public function favoritedBy()
 {
     return $this->belongsToMany(User::class, 'favorites')->withTimestamps();

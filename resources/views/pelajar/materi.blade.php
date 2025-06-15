@@ -2,10 +2,26 @@
 
 @section('content')
 <div class="container mx-auto py-6 px-4">
-    <h1 class="text-3xl font-bold mb-6 text-gray-800">Kategori Materi</h1>
+    <!-- Judul Halaman -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Kategori Materi</h1>
 
+        <!-- Dropdown Filter Kategori -->
+        <form method="GET" action="{{ route('pelajar.materi') }}" class="inline-block">
+            <select name="category" onchange="this.form.submit()" class="px-4 py-2 border rounded-lg text-gray-700">
+                <option value="">Semua Kategori</option>
+                @foreach ($allCategories as $cat)
+                    <option value="{{ $cat->id }}" {{ $selectedCategoryId == $cat->id ? 'selected' : '' }}>
+                        {{ ucfirst($cat->name) }}
+                    </option>
+                @endforeach
+            </select>
+        </form>
+    </div>
+
+    <!-- Daftar Kategori -->
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        @foreach ($categories as $category)
+        @forelse ($categories as $category)
             <a href="{{ route('pelajar.kategori.show', $category->id) }}" class="block rounded-2xl overflow-hidden shadow-lg bg-white border border-gray-200 transition-all duration-300">
 
                 {{-- Gambar --}}
@@ -26,7 +42,11 @@
                     <p class="text-sm text-gray-600">Lihat subkategori & materi</p>
                 </div>
             </a>
-        @endforeach
+        @empty
+            <div class="col-span-full text-center text-gray-500">
+                Tidak ada kategori ditemukan.
+            </div>
+        @endforelse
     </div>
 </div>
 @endsection
