@@ -21,4 +21,12 @@
         <p class="text-sm">Kunci Jawaban: <span class="font-bold">{{ $question->correct_answer }}</span></p>
     </div>
 @endforeach
+
+
+<div class="mt-6">
+    <a href="{{ route('pelajar.quizzes.index') }}" 
+       class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow transition">
+        ← Kembali ke Daftar Kuis
+    </a>
+</div>
 @endsection

@@ -27,6 +27,15 @@ class Forum extends Model
 {
     return $this->hasMany(ForumComment::class);
 }
+    public function likes()
+{
+    return $this->hasMany(ForumLike::class);
+}
+
+public function isLikedBy($pelajarId)
+{
+    return $this->likes()->where('pelajar_id', $pelajarId)->exists();
+}
 
 
 }

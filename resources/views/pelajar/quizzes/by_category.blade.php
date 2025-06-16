@@ -2,12 +2,20 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
+    {{-- Tombol Kembali --}}
+    <div class="mb-6">
+        <a href="{{ route('pelajar.quizzes.index') }}"
+           class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium px-4 py-2 rounded shadow transition">
+            ← Kembali
+        </a>
+    </div>
+
     <h1 class="text-3xl font-bold mb-6 text-center text-sky-700">Daftar Kuis untuk Kategori: {{ $category->name }}</h1>
 
     @if ($quizzes->count())
         @php
             $pelajar = auth('pelajar')->user();
-            $hasilKuis = $pelajar->hasilKuis->keyBy('quiz_id'); // hasilKuis = relasi ke QuizResult
+            $hasilKuis = $pelajar->hasilKuis->keyBy('quiz_id'); 
         @endphp
 
         <div class="space-y-6 max-w-4xl mx-auto">

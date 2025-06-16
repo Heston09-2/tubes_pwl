@@ -27,6 +27,8 @@
         </div>
 
         <a href="{{ route('admin.materials.index') }}" class="block px-4 py-2 rounded hover:bg-gray-700">Tambahkan Materi Pelajar</a>
+        <a href="{{ route('admin.categories.index') }}" class="block px-4 py-2 rounded hover:bg-gray-700">Kategori Materi</a>
+        <a href="{{ route('admin.subcategories.index') }}" class="block px-4 py-2 rounded hover:bg-gray-700">Subkategori Materi</a>
          <a href="{{ route('admin.quizzes.index') }}"  class="block px-4 py-2 rounded hover:bg-gray-700">Kuis & Soal</a>
          <a href="{{ route('admin.contacts.index') }}"  class="block px-4 py-2 rounded hover:bg-gray-700">Pertanyaan</a>
 

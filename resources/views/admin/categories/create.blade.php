@@ -22,13 +22,16 @@
         </div>
     @endif
 
-    {{-- Form --}}
-    <form action="{{ route('admin.categories.store') }}" method="POST" class="space-y-4">
+    {{-- Form Tambah Kategori --}}
+    <form action="{{ route('admin.categories.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4">
         @csrf
 
         <div id="category-inputs">
-            <div class="flex space-x-2 mb-2">
+            <div class="flex flex-col md:flex-row md:space-x-2 mb-2 space-y-2 md:space-y-0">
                 <input type="text" name="name[]" class="w-full border-gray-300 rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Nama Kategori" required>
+
+                <input type="file" name="image[]" accept="image/*" class="w-full md:w-auto border-gray-300 rounded shadow-sm focus:ring-blue-500 focus:border-blue-500">
+
                 <button type="button" onclick="addCategoryInput()" class="bg-gray-300 px-3 rounded text-sm">+</button>
             </div>
         </div>
@@ -37,14 +40,15 @@
     </form>
 </div>
 
-{{-- JavaScript untuk tambah dan hapus input --}}
+{{-- JavaScript untuk tambah dan hapus input kategori --}}
 <script>
     function addCategoryInput() {
         const container = document.getElementById('category-inputs');
         const inputGroup = document.createElement('div');
-        inputGroup.className = 'flex space-x-2 mb-2';
+        inputGroup.className = 'flex flex-col md:flex-row md:space-x-2 mb-2 space-y-2 md:space-y-0';
         inputGroup.innerHTML = `
             <input type="text" name="name[]" class="w-full border-gray-300 rounded shadow-sm focus:ring-blue-500 focus:border-blue-500" placeholder="Nama Kategori" required>
+            <input type="file" name="image[]" accept="image/*" class="w-full md:w-auto border-gray-300 rounded shadow-sm focus:ring-blue-500 focus:border-blue-500">
             <button type="button" onclick="this.parentElement.remove()" class="bg-red-300 px-3 rounded text-sm">-</button>
         `;
         container.appendChild(inputGroup);

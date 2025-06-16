@@ -257,6 +257,14 @@ Route::middleware(['auth:pelajar'])->prefix('pelajar')->name('pelajar.')->group(
     Route::put('/forum/{forum}', [ForumController::class, 'update'])->name('forum.update');
     Route::delete('/forum/{forum}', [ForumController::class, 'destroy'])->name('forum.destroy');
     Route::post('/forum/{forum}/comment', [ForumController::class, 'storeComment'])->name('forum.comment');
+    Route::put('/forum/{forum}/comments/{comment}', [ForumController::class, 'updateComment'])->name('forum.comments.update');
+    Route::delete('/pelajar/forum/{forum}/comments/{comment}', [ForumController::class, 'destroyComment'])->name('forum.comments.destroy');
+
+
+   Route::post('/forum/{forum}/like', [ForumController::class, 'like'])->name('forum.like');
+Route::post('/forum/{forum}/unlike', [ForumController::class, 'unlike'])->name('forum.unlike');
+
+
     
 
 
@@ -326,12 +334,41 @@ Route::middleware(['auth', 'verified', AdminMiddleware::class])->group(function 
     Route::delete('/admin/materials/{material}', [MaterialController::class, 'destroy'])->name('admin.materials.destroy');
 
     // Categories
-    Route::get('/admin/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
-    Route::post('/admin/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+
+    // Tampilkan form tambah kategori
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('admin.categories.create');
+
+    // Simpan kategori baru
+    Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+
+    // Tampilkan form edit kategori
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+
+    // Update kategori
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('admin.categories.update');
+
+    // Hapus kategori
+    Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
 
     // Subcategories
-    Route::get('/admin/subcategories/create', [SubcategoryController::class, 'create'])->name('admin.subcategories.create');
-    Route::post('/admin/subcategories', [SubcategoryController::class, 'store'])->name('admin.subcategories.store');
+
+   Route::get('/admin/subcategories', [SubcategoryController::class, 'index'])->name('admin.subcategories.index');
+
+// Halaman form tambah subkategori
+Route::get('/admin/subcategories/create', [SubcategoryController::class, 'create'])->name('admin.subcategories.create');
+
+// Menyimpan subkategori baru
+Route::post('/admin/subcategories', [SubcategoryController::class, 'store'])->name('admin.subcategories.store');
+
+// Halaman form edit subkategori
+Route::get('/admin/subcategories/{subcategory}/edit', [SubcategoryController::class, 'edit'])->name('admin.subcategories.edit');
+
+// Mengupdate subkategori
+Route::put('/admin/subcategories/{subcategory}', [SubcategoryController::class, 'update'])->name('admin.subcategories.update');
+
+// Menghapus subkategori
+Route::delete('/admin/subcategories/{subcategory}', [SubcategoryController::class, 'destroy'])->name('admin.subcategories.destroy');
 
     // AJAX Subcategories
     Route::get('/admin/categories/{category}/subcategories', function (\App\Models\Category $category) {

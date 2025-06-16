@@ -1,20 +1,25 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Forum;
+use App\Models\ForumComment;
+use App\Models\ForumLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use App\Models\ForumComment;
 
 class ForumController extends Controller
 {
     // 1. Menampilkan semua forum
-    public function index()
-    {
-        $forums = Forum::latest()->with('pelajar')->get();
-        return view('pelajar.forum.index', compact('forums'));
-    }
+public function index()
+{
+    $forums = Forum::with('pelajar', 'likes') // relasi pelajar & likes
+                   ->withCount('forumComments')     // hitung jumlah komentar
+                   ->latest()
+                   ->get();
+
+    return view('pelajar.forum.index', compact('forums'));
+}
 
     // 2. Form membuat forum baru
     public function create()
@@ -48,11 +53,10 @@ class ForumController extends Controller
 
     // 4. Menampilkan detail forum
     public function show(Forum $forum)
-{
-    $comments = $forum->forumComments()->with('pelajar')->latest()->get();
-    return view('pelajar.forum.show', compact('forum', 'comments'));
-}
-
+    {
+        $comments = $forum->forumComments()->with('pelajar')->latest()->get();
+        return view('pelajar.forum.show', compact('forum', 'comments'));
+    }
 
     // 5. Form edit forum (hanya untuk pemilik)
     public function edit(Forum $forum)
@@ -104,7 +108,7 @@ class ForumController extends Controller
         return redirect()->route('pelajar.forum.mine')->with('success', 'Forum berhasil dihapus.');
     }
 
-    // 8. Menampilkan forum milik pelajar yang sedang login
+    // 8. Forum milik pelajar sendiri
     public function myForums()
     {
         $pelajar = Auth::guard('pelajar')->user();
@@ -113,22 +117,75 @@ class ForumController extends Controller
         return view('pelajar.forum.mine', compact('forums'));
     }
 
-   
+    // 9. Simpan komentar forum
+    public function storeComment(Request $request, Forum $forum)
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
 
-public function storeComment(Request $request, Forum $forum)
+        ForumComment::create([
+            'forum_id' => $forum->id,
+            'pelajar_id' => Auth::guard('pelajar')->id(),
+            'content' => $request->content,
+        ]);
+
+        return redirect()->route('pelajar.forum.show', $forum)->with('success', 'Komentar berhasil dikirim.');
+    }
+
+    // 10. Like Forum
+   public function like($id)
 {
-    $request->validate([
-        'content' => 'required|string',
-    ]);
+    $forum = Forum::findOrFail($id);
+    $userId = auth('pelajar')->id();
 
-    ForumComment::create([
-        'forum_id' => $forum->id,
-        'pelajar_id' => Auth::guard('pelajar')->id(),
-        'content' => $request->content,
-    ]);
+    if (!$forum->likes()->where('pelajar_id', $userId)->exists()) {
+        $forum->likes()->create(['pelajar_id' => $userId]);
+    }
 
-    return redirect()->route('pelajar.forum.show', $forum)->with('success', 'Komentar berhasil dikirim.');
+    return response()->json(['success' => true]);
 }
 
+public function unlike($id)
+{
+    $forum = Forum::findOrFail($id);
+    $userId = auth('pelajar')->id();
+
+    $forum->likes()->where('pelajar_id', $userId)->delete();
+
+    return response()->json(['success' => true]);
+}
+
+
+    public function updateComment(Request $request, Forum $forum, ForumComment $comment)
+{
+    // Cek apakah komentar milik pelajar yang login
+    if ($comment->pelajar_id !== auth('pelajar')->id()) {
+        return response()->json(['error' => 'Unauthorized'], 403);
+    }
+
+    // Validasi input
+    $validated = $request->validate([
+        'content' => 'required|string'
+    ]);
+
+    // Update komentar
+    $comment->content = $validated['content'];
+    $comment->save();
+
+    return response()->json([
+    'content' => $comment->content 
+]);
+
+}
+public function destroyComment(Forum $forum, ForumComment $comment)
+{
+    if ($comment->pelajar_id !== auth('pelajar')->id()) {
+        abort(403);
+    }
+
+    $comment->delete();
+    return back();
+}
 
 }

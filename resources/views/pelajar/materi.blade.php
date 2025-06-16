@@ -45,13 +45,14 @@
                     
                     <!-- Image Container -->
                     <div class="relative overflow-hidden">
-                        @if ($category->randomImage)
-                            <div class="w-full h-48 bg-gray-50">
-                                <img src="{{ asset('storage/images' . $category->randomImage) }}" 
-                                     alt="{{ $category->name }}"
-                                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
-                            </div>
-                        @else
+                       @if ($category->image)
+    <div class="w-full h-48 bg-gray-50">
+        <img src="{{ asset('storage/' . $category->image) }}" 
+             alt="{{ $category->name }}"
+             class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105">
+    </div>
+@else
+
                             <div class="w-full h-48 bg-gradient-to-br from-blue-50 to-slate-100 flex items-center justify-center">
                                 <div class="text-center">
                                     <svg class="w-12 h-12 text-blue-300 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

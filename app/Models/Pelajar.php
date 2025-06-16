@@ -45,6 +45,11 @@ public function hasilKuis()
 {
     return $this->hasMany(QuizResult::class, 'pelajar_id');
 }
+public function forumLikes()
+{
+    return $this->hasMany(ForumLike::class);
+}
+
 
 
 
